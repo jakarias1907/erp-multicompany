@@ -61,15 +61,7 @@ $(document).ready(function() {
     $('#companyTable').on('click', '.btn-delete', function() {
         const id = $(this).data('id');
         
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
+        confirmDelete("<?= base_url('master/company/delete') ?>/" + id).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: "<?= base_url('master/company/delete') ?>/" + id,
@@ -79,14 +71,14 @@ $(document).ready(function() {
                     },
                     success: function(response) {
                         if (response.success) {
-                            Swal.fire('Deleted!', response.message, 'success');
+                            showSuccessAlert(response.message);
                             table.ajax.reload();
                         } else {
-                            Swal.fire('Error!', response.message, 'error');
+                            showErrorAlert(response.message);
                         }
                     },
                     error: function() {
-                        Swal.fire('Error!', 'An error occurred', 'error');
+                        showErrorAlert('An error occurred');
                     }
                 });
             }
