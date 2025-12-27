@@ -16,6 +16,8 @@ class CustomerModel extends Model
         'company_id',
         'code',
         'name',
+        'type',
+        'contact_person',
         'email',
         'phone',
         'address',
@@ -23,6 +25,7 @@ class CustomerModel extends Model
         'country',
         'customer_type',
         'credit_limit',
+        'payment_term',
         'payment_term_days',
         'status',
         'created_by',
@@ -76,5 +79,23 @@ class CustomerModel extends Model
     {
         $companyId = $companyId ?? getCurrentCompanyId();
         return $this->where('company_id', $companyId)->findAll();
+    }
+
+    /**
+     * Get outstanding balance for customer
+     */
+    public function getOutstandingBalance($customerId)
+    {
+        $db = \Config\Database::connect();
+        
+        // Calculate from invoices table
+        $result = $db->table('invoices')
+            ->selectSum('total_amount - paid_amount', 'outstanding')
+            ->where('customer_id', $customerId)
+            ->where('status !=', 'paid')
+            ->get()
+            ->getRowArray();
+        
+        return $result['outstanding'] ?? 0;
     }
 }

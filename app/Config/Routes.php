@@ -25,11 +25,29 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
         $routes->post('company/update/(:num)', 'Master\CompanyController::update/$1');
         $routes->post('company/delete/(:num)', 'Master\CompanyController::delete/$1');
         
-        // User Management (placeholder)
-        $routes->get('user', function() { return redirect()->to('/dashboard'); });
+        // User Management
+        $routes->get('user', 'Master\UserController::index');
+        $routes->post('user/datatable', 'Master\UserController::datatable');
+        $routes->get('user/create', 'Master\UserController::create');
+        $routes->post('user/store', 'Master\UserController::store');
+        $routes->get('user/edit/(:num)', 'Master\UserController::edit/$1');
+        $routes->post('user/update/(:num)', 'Master\UserController::update/$1');
+        $routes->post('user/delete/(:num)', 'Master\UserController::delete/$1');
+        $routes->post('user/reset-password/(:num)', 'Master\UserController::resetPassword/$1');
+        $routes->post('user/toggle-status/(:num)', 'Master\UserController::toggleStatus/$1');
+        $routes->post('user/upload-photo', 'Master\UserController::uploadPhoto');
         
-        // Role Management (placeholder)
-        $routes->get('role', function() { return redirect()->to('/dashboard'); });
+        // Role Management
+        $routes->get('role', 'Master\RoleController::index');
+        $routes->post('role/datatable', 'Master\RoleController::datatable');
+        $routes->get('role/create', 'Master\RoleController::create');
+        $routes->post('role/store', 'Master\RoleController::store');
+        $routes->get('role/edit/(:num)', 'Master\RoleController::edit/$1');
+        $routes->post('role/update/(:num)', 'Master\RoleController::update/$1');
+        $routes->post('role/delete/(:num)', 'Master\RoleController::delete/$1');
+        $routes->get('role/permissions/(:num)', 'Master\RoleController::permissions/$1');
+        $routes->post('role/update-permissions/(:num)', 'Master\RoleController::updatePermissions/$1');
+        $routes->post('role/clone/(:num)', 'Master\RoleController::clone/$1');
         
         // Product Management
         $routes->get('product', 'Master\ProductController::index');
@@ -40,11 +58,28 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
         $routes->post('product/update/(:num)', 'Master\ProductController::update/$1');
         $routes->post('product/delete/(:num)', 'Master\ProductController::delete/$1');
         
-        // Customer Management (placeholder)
-        $routes->get('customer', function() { return redirect()->to('/dashboard'); });
+        // Customer Management
+        $routes->get('customer', 'Master\CustomerController::index');
+        $routes->post('customer/datatable', 'Master\CustomerController::datatable');
+        $routes->get('customer/create', 'Master\CustomerController::create');
+        $routes->post('customer/store', 'Master\CustomerController::store');
+        $routes->get('customer/edit/(:num)', 'Master\CustomerController::edit/$1');
+        $routes->post('customer/update/(:num)', 'Master\CustomerController::update/$1');
+        $routes->post('customer/delete/(:num)', 'Master\CustomerController::delete/$1');
+        $routes->get('customer/statement/(:num)', 'Master\CustomerController::statement/$1');
+        $routes->get('customer/outstanding/(:num)', 'Master\CustomerController::getOutstanding/$1');
+        $routes->get('customer/export', 'Master\CustomerController::export');
         
-        // Supplier Management (placeholder)
-        $routes->get('supplier', function() { return redirect()->to('/dashboard'); });
+        // Supplier Management
+        $routes->get('supplier', 'Master\SupplierController::index');
+        $routes->post('supplier/datatable', 'Master\SupplierController::datatable');
+        $routes->get('supplier/create', 'Master\SupplierController::create');
+        $routes->post('supplier/store', 'Master\SupplierController::store');
+        $routes->get('supplier/edit/(:num)', 'Master\SupplierController::edit/$1');
+        $routes->post('supplier/update/(:num)', 'Master\SupplierController::update/$1');
+        $routes->post('supplier/delete/(:num)', 'Master\SupplierController::delete/$1');
+        $routes->get('supplier/statement/(:num)', 'Master\SupplierController::statement/$1');
+        $routes->get('supplier/export', 'Master\SupplierController::export');
     });
     
     // Finance Routes (placeholders)
