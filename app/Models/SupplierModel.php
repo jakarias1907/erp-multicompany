@@ -16,11 +16,13 @@ class SupplierModel extends Model
         'company_id',
         'code',
         'name',
+        'contact_person',
         'email',
         'phone',
         'address',
         'city',
         'country',
+        'payment_term',
         'payment_term_days',
         'bank_name',
         'bank_account',
@@ -76,5 +78,22 @@ class SupplierModel extends Model
     {
         $companyId = $companyId ?? getCurrentCompanyId();
         return $this->where('company_id', $companyId)->findAll();
+    }
+
+    /**
+     * Get outstanding payables for supplier
+     */
+    public function getOutstandingPayables($supplierId)
+    {
+        $db = \Config\Database::connect();
+        
+        $result = $db->table('bills')
+            ->selectSum('total_amount - paid_amount', 'outstanding')
+            ->where('supplier_id', $supplierId)
+            ->where('status !=', 'paid')
+            ->get()
+            ->getRowArray();
+        
+        return $result['outstanding'] ?? 0;
     }
 }
