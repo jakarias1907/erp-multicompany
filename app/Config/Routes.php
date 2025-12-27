@@ -84,9 +84,18 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     
     // Finance Routes (placeholders)
     $routes->group('finance', function($routes) {
+        // Invoice Management
+        $routes->get('invoice', 'Finance\InvoiceController::index');
+        $routes->post('invoice/datatable', 'Finance\InvoiceController::datatable');
+        $routes->get('invoice/create', 'Finance\InvoiceController::create');
+        $routes->post('invoice/store', 'Finance\InvoiceController::store');
+        $routes->get('invoice/view/(:num)', 'Finance\InvoiceController::view/$1');
+        $routes->get('invoice/print/(:num)', 'Finance\InvoiceController::print/$1');
+        $routes->post('invoice/delete/(:num)', 'Finance\InvoiceController::delete/$1');
+        
+        // Placeholders for other finance modules
         $routes->get('account', function() { return redirect()->to('/dashboard'); });
         $routes->get('journal', function() { return redirect()->to('/dashboard'); });
-        $routes->get('invoice', function() { return redirect()->to('/dashboard'); });
         $routes->get('bill', function() { return redirect()->to('/dashboard'); });
         $routes->get('ledger', function() { return redirect()->to('/dashboard'); });
     });
