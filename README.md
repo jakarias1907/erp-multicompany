@@ -1,68 +1,227 @@
-# CodeIgniter 4 Application Starter
+# ERP Multi-Company System
 
-## What is CodeIgniter?
+A comprehensive Enterprise Resource Planning (ERP) system with multi-company and multi-user support built with CodeIgniter 4, AdminLTE 3, MySQL, and modern security features.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 🎯 Features
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+### Core Features
+- **Multi-Company Management**: Support for multiple companies with complete data isolation
+- **Multi-User & Role-Based Access Control (RBAC)**: Granular permissions and role management
+- **High-Level Security**: CSRF protection, XSS prevention, SQL injection prevention, rate limiting, 2FA support
+- **Audit Logging**: Complete activity tracking and login history
+- **Modern UI**: AdminLTE 3 with Bootstrap 4, responsive design
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+### Modules
+- **Master Data**: Companies, Users, Roles, Products, Customers, Suppliers
+- **Finance & Accounting**: Chart of Accounts, Journal Entries, Invoices, Bills
+- **Inventory Management**: Stock tracking, Warehouses, Stock movements, Transfers
+- **Sales & CRM**: Quotations, Sales Orders, Delivery Orders, Invoicing
+- **Purchasing**: Purchase Requests, Purchase Orders, Goods Receipt
+- **HR & Payroll**: Employee management, Attendance, Leave, Payroll
+- **Reports & Analytics**: Comprehensive reporting with export to Excel/PDF
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 📋 Requirements
 
-## Installation & updates
+- PHP 8.1 or higher
+- MySQL 8.0 or higher
+- Composer
+- Apache/Nginx with mod_rewrite enabled
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## 🚀 Installation
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+### 1. Clone Repository
+```bash
+git clone https://github.com/jakarias1907/erp-multicompany.git
+cd erp-multicompany
+```
 
-## Setup
+### 2. Install Dependencies
+```bash
+composer install
+```
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### 3. Configure Environment
+```bash
+cp env .env
+```
 
-## Important Change with index.php
+Edit `.env` file and configure your database:
+```env
+CI_ENVIRONMENT = development
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+app.baseURL = 'http://localhost:8080/'
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+database.default.hostname = localhost
+database.default.database = erp_multicompany
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+database.default.port = 3306
+```
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### 4. Create Database
+```bash
+mysql -u root -p
+CREATE DATABASE erp_multicompany;
+EXIT;
+```
 
-## Repository Management
+### 5. Run Migrations
+```bash
+php spark migrate
+```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 6. Seed Initial Data
+```bash
+php spark db:seed InitialDataSeeder
+```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+### 7. Start Development Server
+```bash
+php spark serve
+```
 
-## Server Requirements
+Visit http://localhost:8080 in your browser.
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+## 🔐 Default Login Credentials
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+```
+Email: admin@erp.com
+Password: Admin@123456
+```
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+**⚠️ IMPORTANT**: Change the default password immediately after first login!
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+## 📁 Project Structure
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+```
+erp-multicompany/
+├── app/
+│   ├── Config/          # Application configuration
+│   ├── Controllers/     # Application controllers
+│   │   ├── Auth/       # Authentication controllers
+│   │   └── Dashboard/  # Dashboard controllers
+│   ├── Database/
+│   │   ├── Migrations/ # Database migrations
+│   │   └── Seeds/      # Database seeders
+│   ├── Filters/        # Request filters (Auth, RBAC, etc.)
+│   ├── Libraries/      # Custom libraries (Auth, PDF, etc.)
+│   ├── Models/         # Database models
+│   └── Views/          # View templates
+│       ├── auth/       # Authentication views
+│       ├── dashboard/  # Dashboard views
+│       └── layouts/    # Layout templates
+├── public/             # Public assets (CSS, JS, images)
+├── writable/           # Writable files (logs, cache, uploads)
+└── .env               # Environment configuration
+```
+
+## 🔒 Security Features
+
+### Authentication & Authorization
+- ✅ Secure password hashing (bcrypt)
+- ✅ Session management
+- ✅ Rate limiting (5 failed attempts = 15 min lockout)
+- ✅ Two-Factor Authentication (2FA) support
+- ✅ Force password change on first login
+- ✅ Remember me functionality
+
+### Protection Mechanisms
+- ✅ CSRF Protection enabled by default
+- ✅ XSS Prevention through input validation and output escaping
+- ✅ SQL Injection Prevention (Query Builder & prepared statements)
+- ✅ Brute Force Protection
+- ✅ Secure headers (X-Frame-Options, X-Content-Type-Options, etc.)
+
+### Audit & Logging
+- ✅ User activity logging
+- ✅ Login history with IP tracking
+- ✅ Database change tracking (created_by, updated_by)
+- ✅ Failed login attempts tracking
+
+## 📊 Database Schema
+
+All tables include:
+- `company_id` for multi-company data isolation
+- `created_by`, `updated_by`, `deleted_by` for audit trail
+- `created_at`, `updated_at`, `deleted_at` (soft delete)
+
+### Core Tables
+- `companies` - Company master data
+- `users` - User accounts
+- `roles` - User roles
+- `permissions` - System permissions
+- `role_permissions` - Role-permission mapping
+- `company_users` - User-company assignments
+
+### Operational Tables
+- Products, Customers, Suppliers
+- Chart of Accounts, Journal Entries
+- Invoices, Bills
+- Warehouses, Stock Cards, Stock Movements
+- Sales Orders, Purchase Orders
+- Employees, Attendance, Payroll
+
+## 🎨 Technology Stack
+
+- **Backend**: CodeIgniter 4.6.4
+- **Frontend**: AdminLTE 3, Bootstrap 4
+- **Database**: MySQL 8.0+
+- **JavaScript Libraries**: 
+  - jQuery
+  - SweetAlert2 (alerts & notifications)
+  - DataTables (planned)
+  - Chart.js (planned)
+  - Select2 (planned)
+
+## 📝 Development Roadmap
+
+### Phase 1: Core Foundation ✅
+- [x] Project setup with CodeIgniter 4
+- [x] Database migrations for all modules
+- [x] Authentication system with security features
+- [x] Multi-company architecture
+- [x] Basic UI with AdminLTE 3
+
+### Phase 2: Master Data (In Progress)
+- [ ] Company management CRUD
+- [ ] User management CRUD
+- [ ] Role & permission management
+- [ ] Product management
+- [ ] Customer & supplier management
+
+### Phase 3: Operations
+- [ ] Sales module
+- [ ] Purchase module
+- [ ] Inventory management
+- [ ] Finance & accounting
+
+### Phase 4: Advanced Features
+- [ ] HR & Payroll
+- [ ] Reports & analytics
+- [ ] Email notifications
+- [ ] Export functionality (Excel, PDF)
+
+## 🤝 Contributing
+
+This project is currently in development. Contributions, issues, and feature requests are welcome!
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👨‍💻 Author
+
+**Jakarias**
+- GitHub: [@jakarias1907](https://github.com/jakarias1907)
+
+## 🙏 Acknowledgments
+
+- CodeIgniter 4 Framework
+- AdminLTE 3 Template
+- Bootstrap Framework
+- Font Awesome Icons
+
+---
+
+**Note**: This is a production-ready ERP system foundation. Implementation is being done in phases. Security measures have been implemented and tested. Always review and test thoroughly before deploying to production.
