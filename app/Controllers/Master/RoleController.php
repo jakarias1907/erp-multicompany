@@ -5,17 +5,20 @@ namespace App\Controllers\Master;
 use App\Controllers\BaseController;
 use App\Models\RoleModel;
 use App\Models\PermissionModel;
+use App\Models\RolePermissionModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RoleController extends BaseController
 {
     protected $roleModel;
     protected $permissionModel;
+    protected $rolePermissionModel;
 
     public function __construct()
     {
         $this->roleModel = new RoleModel();
         $this->permissionModel = new PermissionModel();
+        $this->rolePermissionModel = new RolePermissionModel();
         helper(['form', 'url']);
     }
 
