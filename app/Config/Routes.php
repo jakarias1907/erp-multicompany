@@ -31,8 +31,14 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
         // Role Management (placeholder)
         $routes->get('role', function() { return redirect()->to('/dashboard'); });
         
-        // Product Management (placeholder)
-        $routes->get('product', function() { return redirect()->to('/dashboard'); });
+        // Product Management
+        $routes->get('product', 'Master\ProductController::index');
+        $routes->post('product/datatable', 'Master\ProductController::datatable');
+        $routes->get('product/create', 'Master\ProductController::create');
+        $routes->post('product/store', 'Master\ProductController::store');
+        $routes->get('product/edit/(:num)', 'Master\ProductController::edit/$1');
+        $routes->post('product/update/(:num)', 'Master\ProductController::update/$1');
+        $routes->post('product/delete/(:num)', 'Master\ProductController::delete/$1');
         
         // Customer Management (placeholder)
         $routes->get('customer', function() { return redirect()->to('/dashboard'); });
