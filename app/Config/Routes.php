@@ -257,11 +257,55 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     // Reports Routes
     $routes->group('reports', function($routes) {
         $routes->get('/', 'ReportController::index');
-        $routes->get('sales', 'ReportController::sales');
-        $routes->get('purchase', 'ReportController::purchase');
-        $routes->get('inventory', 'ReportController::inventory');
-        $routes->get('customer-statement/(:num)', 'ReportController::customerStatement/$1');
-        $routes->get('supplier-statement/(:num)', 'ReportController::supplierStatement/$1');
-        $routes->post('export', 'ReportController::export');
+        
+        // Sales Report
+        $routes->get('sales-report', 'ReportController::salesReport');
+        $routes->get('sales-report-pdf', 'ReportController::salesReportPdf');
+        $routes->get('sales-report-excel', 'ReportController::salesReportExcel');
+        
+        // Purchase Report
+        $routes->get('purchase-report', 'ReportController::purchaseReport');
+        $routes->get('purchase-report-pdf', 'ReportController::purchaseReportPdf');
+        $routes->get('purchase-report-excel', 'ReportController::purchaseReportExcel');
+        
+        // Inventory Report
+        $routes->get('inventory-report', 'ReportController::inventoryReport');
+        $routes->get('inventory-report-pdf', 'ReportController::inventoryReportPdf');
+        $routes->get('inventory-report-excel', 'ReportController::inventoryReportExcel');
+        
+        // Customer Statement
+        $routes->get('customer-statement', 'ReportController::customerStatement');
+        $routes->get('customer-statement-pdf', 'ReportController::customerStatementPdf');
+        $routes->get('customer-statement-excel', 'ReportController::customerStatementExcel');
+        
+        // Supplier Statement
+        $routes->get('supplier-statement', 'ReportController::supplierStatement');
+        $routes->get('supplier-statement-pdf', 'ReportController::supplierStatementPdf');
+        $routes->get('supplier-statement-excel', 'ReportController::supplierStatementExcel');
+        
+        // Trial Balance
+        $routes->get('trial-balance', 'ReportController::trialBalance');
+        $routes->get('trial-balance-pdf', 'ReportController::trialBalancePdf');
+        $routes->get('trial-balance-excel', 'ReportController::trialBalanceExcel');
+        
+        // Balance Sheet
+        $routes->get('balance-sheet', 'ReportController::balanceSheet');
+        $routes->get('balance-sheet-pdf', 'ReportController::balanceSheetPdf');
+        $routes->get('balance-sheet-excel', 'ReportController::balanceSheetExcel');
+        
+        // Income Statement
+        $routes->get('income-statement', 'ReportController::incomeStatement');
+        $routes->get('income-statement-pdf', 'ReportController::incomeStatementPdf');
+        $routes->get('income-statement-excel', 'ReportController::incomeStatementExcel');
+        
+        // Attendance Report
+        $routes->get('attendance-report', 'ReportController::attendanceReport');
+        $routes->get('attendance-report-pdf', 'ReportController::attendanceReportPdf');
+        $routes->get('attendance-report-excel', 'ReportController::attendanceReportExcel');
+        
+        // Payroll Report
+        $routes->get('payroll-report', 'ReportController::payrollReport');
+        $routes->get('payroll-report-pdf', 'ReportController::payrollReportPdf');
+        $routes->get('payroll-report-excel', 'ReportController::payrollReportExcel');
     });
 });
