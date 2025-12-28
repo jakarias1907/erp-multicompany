@@ -34,8 +34,10 @@ class PdfReportLibrary extends TCPDF
     {
         // Company logo
         if (!empty($this->companyData['logo'])) {
-            $logoPath = FCPATH . 'uploads/companies/' . $this->companyData['logo'];
-            if (file_exists($logoPath)) {
+            // Sanitize filename to prevent path traversal
+            $logoFilename = basename($this->companyData['logo']);
+            $logoPath = FCPATH . 'uploads/companies/' . $logoFilename;
+            if (file_exists($logoPath) && is_file($logoPath)) {
                 $this->Image($logoPath, 15, 10, 30);
             }
         }

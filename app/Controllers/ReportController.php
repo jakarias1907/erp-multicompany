@@ -11,6 +11,7 @@ use App\Models\PurchaseOrderModel;
 use App\Models\StockCardModel;
 use App\Models\CustomerModel;
 use App\Models\SupplierModel;
+use App\Models\BillModel;
 use App\Models\JournalEntryModel;
 use App\Models\JournalEntryLineModel;
 use App\Models\ChartOfAccountModel;
@@ -26,6 +27,7 @@ class ReportController extends BaseController
     protected $stockCardModel;
     protected $customerModel;
     protected $supplierModel;
+    protected $billModel;
     protected $journalEntryModel;
     protected $journalEntryLineModel;
     protected $chartOfAccountModel;
@@ -42,6 +44,7 @@ class ReportController extends BaseController
         $this->stockCardModel = new StockCardModel();
         $this->customerModel = new CustomerModel();
         $this->supplierModel = new SupplierModel();
+        $this->billModel = new BillModel();
         $this->journalEntryModel = new JournalEntryModel();
         $this->journalEntryLineModel = new JournalEntryLineModel();
         $this->chartOfAccountModel = new ChartOfAccountModel();
@@ -575,13 +578,13 @@ class ReportController extends BaseController
         
         $supplier = $this->supplierModel->find($supplierId);
         
-        $db = \Config\Database::connect();
-        $builder = $db->table('bills')
+        // Use BillModel for consistency
+        $bills = $this->billModel
             ->where('supplier_id', $supplierId)
             ->where('bill_date >=', $startDate)
-            ->where('bill_date <=', $endDate);
-        
-        $bills = $builder->get()->getResultArray();
+            ->where('bill_date <=', $endDate)
+            ->where('company_id', session()->get('current_company_id'))
+            ->findAll();
 
         $pdf = new PdfReportLibrary();
         $pdf->AddPage();
@@ -612,13 +615,13 @@ class ReportController extends BaseController
         $totalAmount = 0;
         $totalPaid = 0;
         foreach ($bills as $bill) {
-            $balance = $bill['total_amount'] - $bill['paid_amount'];
+            $balance = $bill['total'] - $bill['paid_amount'];
             $pdf->Cell(30, 6, date('d/m/Y', strtotime($bill['bill_date'])), 1, 0, 'C');
             $pdf->Cell(40, 6, $bill['bill_number'], 1, 0, 'L');
-            $pdf->Cell(35, 6, number_format($bill['total_amount'], 2), 1, 0, 'R');
+            $pdf->Cell(35, 6, number_format($bill['total'], 2), 1, 0, 'R');
             $pdf->Cell(35, 6, number_format($bill['paid_amount'], 2), 1, 0, 'R');
             $pdf->Cell(45, 6, number_format($balance, 2), 1, 1, 'R');
-            $totalAmount += $bill['total_amount'];
+            $totalAmount += $bill['total'];
             $totalPaid += $bill['paid_amount'];
         }
 
@@ -640,13 +643,13 @@ class ReportController extends BaseController
         
         $supplier = $this->supplierModel->find($supplierId);
         
-        $db = \Config\Database::connect();
-        $builder = $db->table('bills')
+        // Use BillModel for consistency
+        $bills = $this->billModel
             ->where('supplier_id', $supplierId)
             ->where('bill_date >=', $startDate)
-            ->where('bill_date <=', $endDate);
-        
-        $bills = $builder->get()->getResultArray();
+            ->where('bill_date <=', $endDate)
+            ->where('company_id', session()->get('current_company_id'))
+            ->findAll();
 
         $excel = new ExcelExportLibrary();
         $excel->addCompanyHeader('E');
@@ -667,15 +670,15 @@ class ReportController extends BaseController
         $totalAmount = 0;
         $totalPaid = 0;
         foreach ($bills as $bill) {
-            $balance = $bill['total_amount'] - $bill['paid_amount'];
+            $balance = $bill['total'] - $bill['paid_amount'];
             $excel->addTableRow([
                 date('d/m/Y', strtotime($bill['bill_date'])),
                 $bill['bill_number'],
-                number_format($bill['total_amount'], 2),
+                number_format($bill['total'], 2),
                 number_format($bill['paid_amount'], 2),
                 number_format($balance, 2)
             ]);
-            $totalAmount += $bill['total_amount'];
+            $totalAmount += $bill['total'];
             $totalPaid += $bill['paid_amount'];
         }
 
@@ -685,9 +688,6 @@ class ReportController extends BaseController
 
         $excel->download('supplier_statement_' . date('Ymd'));
     }
-
-    // Continue in next comment...
-}
 
     // ====================== TRIAL BALANCE ======================
     public function trialBalance()

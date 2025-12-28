@@ -113,8 +113,11 @@ class ExcelExportLibrary
     {
         $writer = new Xlsx($this->spreadsheet);
         
+        // Sanitize filename to prevent header injection
+        $safeFilename = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $filename);
+        
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Content-Disposition: attachment;filename="' . $safeFilename . '.xlsx"');
         header('Cache-Control: max-age=0');
         
         $writer->save('php://output');
